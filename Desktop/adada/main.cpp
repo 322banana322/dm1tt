@@ -1,5 +1,5 @@
 #include <iostream>
-
+//stroka dobavlena tolko radi patcha
 void lRoundShiftMas(int* source, int n, int size)
 {
 	for (int k = n; k > 0; k--) 
