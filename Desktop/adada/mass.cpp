@@ -4,7 +4,7 @@ using namespace std;
 int main()
 {
 	int n; 
-	cout << "Enter the dimension of the array"<<endl; 
+	cout << "Enter the dimension of the array"<<endl; //создание и ввод массива с числами
 	cin >> n;
 	if (n<=0)
 	{
@@ -26,7 +26,7 @@ int main()
 	}
 
 
-	for (int i = 0; i < n - 1; i++)
+	for (int i = 0; i < n - 1; i++)	//сортировка массива 
 	{
 		for (int j = 0; j < n - i - 1; j++)
 		{
@@ -40,7 +40,7 @@ int main()
 		}
 	}
 			
-	cout << "In ascending order: ";
+	cout << "In ascending order: ";  //вывод в порядке возрастания и убывания элементов 
 	for (int i = 0; i < n; i++)
 	{
 		cout << arr[i]<<" ";
@@ -56,7 +56,7 @@ int main()
 	
 	int k = 0;
 	int div = 2;
-	int *arr2 = new int[n];
+	int *arr2 = new int[n]; //Массив для сохранения количества множителей
 	
 	for(int i = 0; i < n;i++)
 	{
@@ -64,7 +64,7 @@ int main()
 		
 		while(temp>1)
 		{
-			while(temp%div==0)
+			while(temp%div==0)    //Находим кол-во множителей и сразу заполняем массив
 			{
 				k++;
 				arr2[i]=k;
@@ -75,7 +75,7 @@ int main()
 		}
 	}
 		
-	for (int i = 0; i < n - 1; i++)
+	for (int i = 0; i < n - 1; i++)			//сортировка массивов по увеличению числа множителей
 	{
 		for (int j = 0; j < n - i - 1; j++)
 		{
