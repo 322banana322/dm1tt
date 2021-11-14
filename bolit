@@ -7,8 +7,19 @@ private:
 	int* arr, size;
 public:
 	Mass(int arrSize) {
+
+		if (size < 0)
+		{
+			throw out_of_range("Index error");
+		}
+
 		size = arrSize;
 		arr = new int[size];
+
+		if (!arr)
+		{
+			throw bad_alloc();
+		}
 
 		for (int i = 0; i < size; i++) {
 			arr[i] = i;
@@ -23,12 +34,15 @@ public:
 		size = Copy.size;
 		arr = new int[size];
 
+		if (!arr)
+		{
+			throw bad_alloc();
+		}
+
 		for (int i = 0; i < size; i++) {
 			arr[i] = Copy.arr[i];
 		}
 	}
-
-
 
 	void print() {
 		for (int i = 0; i < size; i++) {
@@ -37,26 +51,37 @@ public:
 		cout << endl;
 	}
 
+
+
 	void setArr(int i, int val) {
-		if (arr[i] < -100 or arr[i] > 100) {
-			cout << "ERROR" << endl;
+
+		if (val > 100 || val < -100)
+		{
+			throw invalid_argument("value outside the range -100..100");
 		}
-		if (i > size or i < 0) {
-			cout << "ERROR" << endl;
+
+
+		if (i >= size || i < 0)
+		{
+			throw out_of_range("Index error");
 		}
-		else arr[i] = val;
 
 	}
 
 	int getArr(int i) {
-		if (i > size || i < 0) {
-			cout << "ERROR" << endl;
 
+		if (i >= size || i < 0)
+		{
+			throw out_of_range("Index error");
 		}
-		else return arr[i];
+		else
+		{
+			return arr[i];
+		}
 	}
 
 	void Addition(Mass& Copy) {
+
 		for (int i = 0; i < size; i++) {
 			arr[i] = arr[i] + Copy.arr[i];
 		}
@@ -88,8 +113,30 @@ public:
 		}
 	}
 
+	double Distance(Mass& Other)
+	{
+		if (typeid(Other.arr[0]) != typeid(int) or typeid(arr[0]) != typeid(int))
+		{
+			throw logic_error("Wrong data type");
+		}
+		double dist = 0;
+		for (int i = 0; i < size; i++) {
+			dist = (toInt(arr[i]) - toInt(Other.arr[i])) * (toInt(arr[i]) - toInt(Other.arr[i])) + dist;
+		}
+		return sqrt(dist);
+	}
+
 };
 
+template<typename T>
+ostream& operator << (ostream& gg, Mass <T>& array)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		gg << i << " - " << array.GetVal(i) << endl;
+	}
+	return gg;
+}
 
 
 int main()
@@ -97,6 +144,22 @@ int main()
 	int size = 0, i = 0;
 
 	Mass a(5);
+	try
+	{
+		Mass<int> arr(3);
+		arr.SetVal(0, 2);
+	}
+
+	catch (out_of_range exception)
+	{
+		cout << "An exception was thrown " << exception.what() << endl;
+	}
+	catch (bad_alloc exception) {
+		cout << "An exception was thrown " << exception.what() << endl;
+	}
+	catch (invalid_argument exception) {
+		cout << "An exception was thrown " << exception.what() << endl;
+	}
 
 	a.print();
 
@@ -114,6 +177,20 @@ int main()
 
 	a.Substruction(Copy);
 
+	try
+	{
+		q.Distance(5);
+	}
+	catch (logic_error exception)
+	{
+		cout << "An exception was thrown " << exception.what() << endl;
+	}
+
+	catch (logic_error exception)
+	{
+		cout << "An exception was thrown " << exception.what() << endl;
+	}
+
 	a.print();
 
 	a.Dobavznach(16);
@@ -121,3 +198,4 @@ int main()
 	a.print();
 
 }
+
