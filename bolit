@@ -6,7 +6,7 @@ class Mass
 {
 private:
 	T* arr;
-	size;
+	int size;
 public:
 	Mass(int arrSize) {
 
@@ -69,13 +69,14 @@ public:
 				throw invalid_argument("value outside the range -100..100");
 			}
 		}
-		
-		if (i >= size || i < 0)
-		{
-			throw invalid_argument("size outside the range -100..100");
-		}
 
-		else arr[i] = val;
+			if (i >= size || i < 0)
+			{
+				throw invalid_argument("size outside the range -100..100");
+			}
+		
+
+			else arr[i] = val;	
 	}
 
 	int getArr(int i) {
@@ -92,17 +93,24 @@ public:
 
 	void Addition(Mass& Copy) {
 
-		for (int i = 0; i < size; i++) {
-			arr[i] = arr[i] + Copy.arr[i];
+		if (typeid(T) == typeid(int))
+		{
+			for (int i = 0; i < size; i++) {
+				arr[i] = arr[i] + Copy.arr[i];
+			}
 		}
 
 	}
 
 	void Substruction(Mass& Copy) {
-		for (int i = 0; i < size; i++) {
-			arr[i] = arr[i] - Copy.arr[i];
-		}
 
+		if (typeid(T) == typeid(int))
+		{
+			for (int i = 0; i < size; i++) {
+
+				arr[i] = arr[i] - Copy.arr[i];
+			}
+		}
 	}
 
 	void Dobavznach(T val) {
@@ -110,7 +118,7 @@ public:
 		if (val > -100 or val < 100) {
 
 			size = size + 1;
-			T* newArr = new P[size];
+			T* newArr = new T[size];
 			for (int i = 0; i < size - 1; i++) {
 
 				newArr[i] = arr[i];
