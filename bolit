@@ -131,11 +131,15 @@ public:
 
 	double Distance(Mass& Other)
 	{
-
 		double dist = 0;
-		for (int i = 0; i < size; i++) {
-			dist = (toP(arr[i]) - toT(Other.arr[i])) * (toT(arr[i]) - toT(Other.arr[i])) + dist;
+
+		if (typeid(T) == typeid(int))
+		{
+			for (int i = 0; i < size; i++) {
+				dist = (toP(arr[i]) - toT(Other.arr[i])) * (toT(arr[i]) - toT(Other.arr[i])) + dist;
+			}
 		}
+		
 		return sqrt(dist);
 	}
 
