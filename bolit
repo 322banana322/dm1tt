@@ -1,12 +1,12 @@
 #include <iostream>
 using namespace std;
-template<typename P>
+template<typename T>
 
 class Mass
 {
 private:
-	P* arr;
-	int size;
+	T* arr;
+	size;
 public:
 	Mass(int arrSize) {
 
@@ -16,7 +16,7 @@ public:
 		}
 
 		size = arrSize;
-		arr = P int[size];
+		arr = T int[size];
 
 		if (!arr)
 		{
@@ -34,7 +34,7 @@ public:
 	Mass(Mass& Copy) {
 
 		size = Copy.size;
-		arr = new P[size];
+		arr = new T[size];
 
 		if (size < 0)
 		{
@@ -60,13 +60,16 @@ public:
 
 
 	
-	void setArr(int i, int val) {
+	void setArr(int i, T val) {
 
-		if (val > 100 || val < -100)
+		if (typeid(T) == typeid(int))
 		{
-			throw invalid_argument("value outside the range -100..100");
+			if (val > 100 || val < -100)
+			{
+				throw invalid_argument("value outside the range -100..100");
+			}
 		}
-	
+		
 		if (i >= size || i < 0)
 		{
 			throw invalid_argument("size outside the range -100..100");
@@ -102,12 +105,12 @@ public:
 
 	}
 
-	void Dobavznach(int val) {
+	void Dobavznach(T val) {
 
 		if (val > -100 or val < 100) {
 
 			size = size + 1;
-			P* newArr = new P[size];
+			T* newArr = new P[size];
 			for (int i = 0; i < size - 1; i++) {
 
 				newArr[i] = arr[i];
@@ -123,15 +126,15 @@ public:
 
 		double dist = 0;
 		for (int i = 0; i < size; i++) {
-			dist = (toP(arr[i]) - toP(Other.arr[i])) * (toP(arr[i]) - toP(Other.arr[i])) + dist;
+			dist = (toP(arr[i]) - toT(Other.arr[i])) * (toT(arr[i]) - toT(Other.arr[i])) + dist;
 		}
 		return sqrt(dist);
 	}
 
 };
 
-template<typename P>
-ostream& operator << (ostream& gg, Mass <P>& array)
+template<typename T>
+ostream& operator << (ostream& gg, Mass <T>& array)
 {
 	for (int i = 0; i < 3; i++)
 	{
@@ -188,10 +191,6 @@ int main()
 		cout << "An exception was thrown " << exception.what() << endl;
 	}
 
-	catch (logic_error exception)
-	{
-		cout << "An exception was thrown " << exception.what() << endl;
-	}
 
 	a.print();
 
@@ -200,4 +199,3 @@ int main()
 	a.print();
 
 }
-
