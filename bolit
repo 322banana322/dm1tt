@@ -6,7 +6,7 @@ class Mass
 {
 private:
 	P* arr;
-	size;
+	int size;
 public:
 	Mass(int arrSize) {
 
