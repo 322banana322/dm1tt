@@ -1,221 +1,205 @@
-#include <map>
 #include <iostream>
 #include <string>
-#include <vector>
 #include <exception>
-#include <ctime>
-#include <cstdlib>
-#include <stack>
 
-using namespace std;
+template <typename T>
+class item {
+public:
+	item* next_ptr;
+	item* back_ptr;
+	T data;
+	unsigned int read;
+};
 
-void workMap()
+
+template <typename T>
+class List
 {
-	map <string, int> lilmap; 
-	string inputStr;
-	string val = "";
-	getline(cin, inputStr);
+private:
+	item<T>* mainPtr = nullptr;
+
+	item<T>* poisk(int position);
+	void change(item<T>* u1, item<T>* u2);
+	void sort(int left, int right);
+
+public:
+	void additem(T n_element);
+	void get_item(int position);
+
+	void all_list();
+	int check_size();
+
+	~List();
+};
+
+template <typename T>
+int List<T>::check_size()
+{
+	item<T>* cur = mainPtr;
 	int i = 0;
-	int valNum = 0;
-	while (i < inputStr.length())
+
+	while (cur != nullptr)
 	{
-		valNum = i;
-		if (valNum >= inputStr.length())
-		{
-			if (i == 0)
-			{
-				std::cout << "Input string is empty" << endl;
-			}
-			else
-			{
-				std::cout << "Input string is over" << endl;
-			}
-			break;
-		}
-		while ((inputStr[valNum] != ' ') and (valNum != inputStr.length()))
-		{
-			val.push_back(inputStr[valNum]);
-			valNum++;
-		}
-		lilmap[val]++;
-		val.clear();
-		i = valNum + 1;
+		++i;
+		cur = cur->next_ptr;
 	}
-	map <string, int>::iterator it = lilmap.begin();
-	for (int j = 0; it != lilmap.end(); it++, j++) {
-		std::cout << it->first << " - " << it->second << endl;
-	}
+
+	return i;
 }
 
-
-void workVector()
+template <typename T>
+void List<T>::additem(T n_element)
 {
-	try
+	item<T>* n_item = new item<T>;
+
+	if (mainPtr == nullptr)
 	{
-		int length1, length2;
-		std::cout << "Size 1: " << endl;
-		cin >> length1;
-		std::cout << "Size 2:" << endl;
-		cin >> length2;
-		if (length1 < 1 || length2 < 1)
+		n_item->next_ptr = nullptr;
+		n_item->back_ptr = nullptr;
+
+		mainPtr = n_item;
+	}
+	else
+	{
+		item<T>* cur = mainPtr;
+		while (cur->next_ptr != nullptr)
 		{
-			throw std::out_of_range("Wrong lenght");
+			cur = cur->next_ptr;
 		}
+		n_item->next_ptr = nullptr;
+		n_item->back_ptr = cur;
 
-		vector <int> vect1(length1);
-		vector <int> vect2(length2);
-
-
-		srand(time(NULL));
-		float sum1(0), sum2(0);
-
-		
-		for (int i = 0; i < length1; i++)
-		{
-			vect1[i] = rand() % 201 - 100;
-			std::cout << vect1[i] << " ";
-		}
-		std::cout << endl;
-
-	
-		for (int i = 0; i < length2; i++)
-		{
-			vect2[i] = rand() % 101 - 100;
-			std::cout << vect2[i] << " ";
-		}
-		std::cout << endl;
-
-		
-		for (int i = 0; i < length1; i++)
-		{
-			sum1 += vect1[i];
-		}
-		std::cout << "average vect1 - " << sum1 / length1 << endl;
-
-
-		for (int i = 0; i < length2; i++)
-		{
-			sum2 += vect2[i];
-		}
-		std::cout << "average vect2 - " << sum2 / length2 << endl;
-
-	
-		int min, max;
-		if (vect1.size() < vect2.size())
-		{
-			min = vect1.size();
-			max = vect2.size();
-		}
-		else if (vect1.size() != vect2.size())
-		{
-			min = vect2.size();
-			max = vect1.size();
-		}
-		else
-		{
-			min = vect1.size();
-			max = min;
-		}
-
-		if (min == vect1.size())
-		{
-			for (int i = 0; i < min; i++)
-			{
-				for (int j = i; j < max; j++)
-				{
-					if (vect1[i] == vect2[j])
-					{
-						std::cout << vect1[i] << " ";
-					}
-				}
-			}
-		}
-		else
-		{
-			for (int i = 0; i < min; i++)
-			{
-				for (int j = i; j < max; j++)
-				{
-					if (vect2[i] == vect1[j])
-					{
-						std::cout << vect2[i] << " ";
-					}
-				}
-			}
-			std::cout << endl;
-		}
-
+		cur->next_ptr = n_item;
 	}
 
-	catch (std::out_of_range e)
-	{
-		cout << e.what() << endl;
-	}
-	cout << endl;
+	n_item->data = n_element;
+	n_item->read = 0;
 }
 
-void printStack(int i, vector<vector<int>>& matrix)
+template <typename T>
+item<T>* List<T>::poisk(int position)
 {
-	vector<bool> used(matrix.size(), false);
-	stack<int> st;
-
-	while (i != -1)
+	item<T>* cur = mainPtr;
+	while (cur->next_ptr != nullptr && position - 1 > 0)
 	{
-		if (used[i] == false)
-		{
-			used[i] = true;
-
-			for (int j = 0; j < matrix.size(); j++)
-				if (matrix[i][j] == 1 && used[j] == false) st.push(j);
-		}
-
-		if (!st.empty())
-		{
-			i = st.top();
-			st.pop();
-		}
-		else i = -1;
+		cur = cur->next_ptr;
+		position--;
 	}
 
-	for (bool a : used)
-	{
-		cout << a << ' ';
-	}
-	cout << endl;
+	return cur;
 }
 
-void workStack()
+template <typename T>
+void List<T>::change(item<T>* u1, item<T>* u2)
 {
-	int count;
-	cin >> count;
-	const int vertexCount = count;
-	vector<vector<int>> matrix(vertexCount, vector<int>(vertexCount, 0));
-	int x;
-	for (int i = 0; i < vertexCount; i++)
-	{
-		matrix[i][i] = 1;
-		do
+	T pdata = u1->data;
+	unsigned int appeals = u1->read;
+
+	u1->data = u2->data;
+	u1->read = u2->read;
+
+	u2->data = pdata;
+	u2->read = appeals;
+}
+
+template <typename T>
+void List<T>::sort(int left, int right)
+{
+	int l_hold = left;
+	int r_hold = right;
+	int pivot = poisk(left)->read;
+
+	while (left < right) {
+
+		while ((poisk(right)->read <= pivot) && (left < right)) right--;
+
+		if (left != right)
 		{
-			cin >> x;
-			if (x != 0)
-			{
-				matrix[i][x - 1] = 1;
-			}
-		} while (cin.peek() != '\n');
+			change(poisk(right), poisk(left));
+			left++;
+		}
+
+		while ((poisk(left)->read) && (left < right)) left++;
+
+		if (left != right)
+		{
+			change(poisk(left), poisk(right));
+			right--;
+		}
 	}
-	for (int i = 0; i < vertexCount; i++) printStack(i, matrix);
+
+	poisk(left)->read = pivot;
+	if (l_hold < right) sort(l_hold, right - 1);
+	if (r_hold > right) sort(right + 1, r_hold);
 
 }
 
+template <typename T>
+void List<T>::get_item(int position)
+{
+	item<T>* cur = mainPtr;
+	while (cur->next_ptr != nullptr && position - 1 > 0)
+	{
+		cur = cur->next_ptr;
+		position--;
+	}
+
+	std::cout << cur->data << " zapros " << cur->read << '\n';
+
+	cur->read += 1;
+	sort(0, check_size());
+}
+
+
+template <typename T>
+void List<T>::all_list()
+{
+	item<T>* cur = mainPtr;
+
+	while (cur != nullptr)
+	{
+		std::cout << ""<<std::endl;
+		std::cout<<cur->data<<" "<<" found:  "<< cur->read << '\n';
+		cur = cur->next_ptr;
+	}
+}
+
+template <typename T>
+List<T>::~List()
+{
+	if (mainPtr == nullptr) return;
+
+	item<T>* cur = mainPtr;
+	while (cur->next_ptr != nullptr)
+	{
+		cur = cur->next_ptr;
+		delete[] cur->back_ptr;
+	}
+
+	delete[] cur;
+}
 
 int main()
 {
-	setlocale(LC_ALL, "Russian");
+	List<std::string> obj;
+	obj.additem("yo");
+	obj.additem("ya");
+	obj.additem("sobaki");
+	obj.additem("naruto");
+	obj.additem("ydzumaki");
 
+	obj.get_item(1);
+	obj.get_item(1);
+	obj.get_item(1);
+	obj.get_item(1);
+	obj.get_item(3);
+	obj.get_item(3);
+	obj.get_item(3);
+	obj.get_item(2);
+	obj.get_item(2);
+	
 
-	workMap();
-	workVector();
-	workStack();
+	obj.all_list();
 
 	return 0;
 }
