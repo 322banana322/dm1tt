@@ -1,0 +1,111 @@
+#include <iostream>;
+#include <string>;
+
+using namespace std;
+
+struct Photo
+{
+    int ma[100][40];
+    int mx;
+    int my;
+};
+
+class Controler
+{
+public:
+    virtual void get_command()
+    {
+        cout << "Controler";
+    }
+};
+
+class ConsoleCommand : public Controler
+{
+public:
+    void get_command() {
+        cout << "ConsoleCommand";
+    }
+};
+
+class NetControler : public Controler
+{
+public:
+    void get_command()
+    {
+        cout << "NetControler";
+    }
+};
+
+class Robot
+{
+private:
+    int coordinat;
+    Controler* cont;
+public:
+    Robot(Controler* control)
+    {
+        cont = control;
+    }
+    void get()
+    {
+        cont->get_command();
+    }
+
+    void move_robot() {}
+
+};
+
+class Camera
+{
+    void detection_robot() {}
+    void detection_graffiti() {}
+};
+
+class System
+{
+public:
+    void userCommand(string input) {
+
+        if (input == "1")
+            on();
+        if (input == "2")
+            off();
+        if (input == "3")
+            read_coord();
+        if (input == "4")
+            trajectory_drawing();
+        if (input == "5")
+            transfer_inf_robot();
+    }
+    void on() {
+        cout << "system on" << endl;
+        
+    }
+    void off() {
+        cout << "system off" << endl;
+    }
+    void read_coord() {
+        cout << "coordinates read" << endl;
+    }
+    void trajectory_drawing() {
+        cout << "trajectory drawn" << endl;
+    }
+    void transfer_inf_robot() {
+        cout << "data transfer has been made" << endl;
+    }
+    int a;
+
+};
+
+int main()
+{
+    string a;
+    cin >> a;
+    System us;
+        us.userCommand(a);
+  
+    //Robot rob(new ConsoleCommand);
+    //rob.get();
+    ConsoleCommand cmd;
+    return 0;
+}
