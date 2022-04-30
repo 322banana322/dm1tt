@@ -76,6 +76,7 @@ public:
             trajectory_drawing();
         if (input == "5")
             transfer_inf_robot();
+
     }
     void on() {
         cout << "system on" << endl;
@@ -93,19 +94,27 @@ public:
     void transfer_inf_robot() {
         cout << "data transfer has been made" << endl;
     }
-    int a;
-
+ 
 };
 
 int main()
 {
     string a;
+    
     cin >> a;
-    System us;
+    
+    while (a != "stop") {
+
+
+        System us;
         us.userCommand(a);
-  
+        cin >> a;
+    }
+    
+    
     //Robot rob(new ConsoleCommand);
     //rob.get();
     ConsoleCommand cmd;
+   
     return 0;
 }
