@@ -1,120 +1,143 @@
-#include <iostream>;
-#include <string>;
-
+#include <iostream>
 using namespace std;
 
-struct Photo
+enum class event
 {
-    int ma[100][40];
-    int mx;
-    int my;
+	press_on,
+	press_off,
+	read_coords,
+	trajectory_draw,
+	transfer_date,
+	};
+
+enum class states
+{
+	on,
+	off,
+	reading,
+	drawing,
+	transfering,
+	};
+
+class cam_sys {
+	states state;
+public:
+
+	void pevent(const event& input)
+	{
+		switch (input)
+		{
+		case event::press_on:
+			f_on();
+			state = states::on;
+			break;
+
+		case event::press_off:
+			f_off();
+			state = states::off;
+			break;
+
+		case event::read_coords:
+			f_read_coords();
+			state = states::reading;
+			break;
+
+		case event::trajectory_draw:
+			f_trajectory_draw();
+			state = states::drawing;
+			break;
+
+		case event::transfer_date:
+			f_transfer_date();
+			state = states::transfering;
+			break;
+		}
+	}
+
+	void f_on() {
+		state = states::on;
+		cout << "System is on now" << endl;
+	}
+
+	void f_off() {
+		state = states::off;
+		cout << "System is off now" << endl;
+	}
+
+	void f_read_coords() {
+		state = states::reading;
+		cout << "reading..." << endl;
+	}
+
+	void f_trajectory_draw() {
+		state = states::drawing;
+		cout << "drawing..." << endl;
+	}
+
+	void f_transfer_date() {
+		state = states::transfering;
+		cout << "transfering..." << endl;
+	}
 };
 
 class Controler
 {
 public:
-    virtual void get_command()
-    {
-        cout << "Controler";
-    }
+	virtual event get_command() = 0;
+};
+
+class InternetCommand : public Controler
+{
+public:
+	event get_command()
+	{
+		return event::press_off;
+	}
 };
 
 class ConsoleCommand : public Controler
 {
 public:
-    void get_command() {
-        cout << "ConsoleCommand";
-    }
+	event get_command()
+	{
+		char c;
+
+		while (true)
+		{
+			cin >> c;
+
+			switch (c)
+			{
+			case '0':
+				return event::press_off;
+
+			case '1':
+				return event::press_on;
+
+			case '2':
+				return event::read_coords;
+
+			case '3':
+				return event::trajectory_draw;
+
+			case '4':
+				return event::transfer_date;
+			default:
+				cout << "this command does not exist" << endl;
+			
+			}
+		}
+	}
 };
 
-class NetControler : public Controler
-{
-public:
-    void get_command()
-    {
-        cout << "NetControler";
-    }
-};
+int main() {
+	cam_sys a;
+	Controler* cmd;
+	cmd = new ConsoleCommand();
 
-class Robot
-{
-private:
-    int coordinat;
-    Controler* cont;
-public:
-    Robot(Controler* control)
-    {
-        cont = control;
-    }
-    void get()
-    {
-        cont->get_command();
-    }
-
-    void move_robot() {}
-
-};
-
-class Camera
-{
-    void detection_robot() {}
-    void detection_graffiti() {}
-};
-
-class System
-{
-public:
-    void userCommand(string input) {
-
-        if (input == "1")
-            on();
-        if (input == "2")
-            off();
-        if (input == "3")
-            read_coord();
-        if (input == "4")
-            trajectory_drawing();
-        if (input == "5")
-            transfer_inf_robot();
-
-    }
-    void on() {
-        cout << "system on" << endl;
-        
-    }
-    void off() {
-        cout << "system off" << endl;
-    }
-    void read_coord() {
-        cout << "coordinates read" << endl;
-    }
-    void trajectory_drawing() {
-        cout << "trajectory drawn" << endl;
-    }
-    void transfer_inf_robot() {
-        cout << "data transfer has been made" << endl;
-    }
- 
-};
-
-int main()
-{
-    string a;
-    
-    cin >> a;
-    
-    while (a != "stop") {
-
-
-        System us;
-        us.userCommand(a);
-        cin >> a;
-    }
-    
-    
-    //Robot rob(new ConsoleCommand);
-    //rob.get();
-    ConsoleCommand cmd;
-   
-    return 0;
+	while (true)
+	{
+		event e = cmd->get_command();
+		a.pevent(e);
+	}
 }
