@@ -14,7 +14,7 @@ enum class event
 	read_coords,
 	trajectory_draw,
 	transfer_date,
-	};
+};
 
 enum class states
 {
@@ -23,7 +23,7 @@ enum class states
 	reading,
 	drawing,
 	transfering,
-	};
+};
 
 class cam_sys {
 	states state;
@@ -62,27 +62,45 @@ public:
 
 	void f_on() {
 		state = states::on;
-		cout << "System is on now" << endl;
+		cout << "successfully" << endl;
+		sendMessageToServ(System is on now);
 	}
 
 	void f_off() {
 		state = states::off;
-		cout << "System is off now" << endl;
+		cout << "successfully" << endl;
+		sendMessageToServ(System is off now);
 	}
 
 	void f_read_coords() {
 		state = states::reading;
-		cout << "reading..." << endl;
+		cout << "successfully" << endl;
+		sendMessageToServ(reading...);
 	}
 
 	void f_trajectory_draw() {
 		state = states::drawing;
-		cout << "drawing..." << endl;
+		cout << "successfully" << endl;
+		sendMessageToServ(drawing...);
 	}
 
 	void f_transfer_date() {
 		state = states::transfering;
-		cout << "transfering..." << endl;
+		cout << "successfully" << endl;
+		sendMessageToServ(transfering...);
+	}
+
+	void sendMessageToServ(string replyy)
+	{
+		int sock;
+		struct sockaddr_in addr;
+		sock = socket(AF_INET, SOCK_DGRAM, 0);
+
+		addr.sin_family = AF_INET;
+		addr.sin_port = htons(3425);
+		addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+		sendto(sock, replyy.c_str(), sizeof(replyy), 0, (struct sockaddr*)&addr, sizeof(addr));
+		close(sock);
 	}
 };
 
@@ -101,19 +119,7 @@ public:
 	}
 };
 
-void sendServerMessage(string replyy)
-    {
-        int sock;
-        struct sockaddr_in addr;
-        sock = socket(AF_INET, SOCK_DGRAM, 0);
 
-        addr.sin_family = AF_INET;
-        addr.sin_port = htons(3425);
-        addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-        sendto(sock, replyy.c_str(), sizeof(replyy), 0, (struct sockaddr*)&addr, sizeof(addr));
-        close(sock);
-    }
-    
 class ConsoleCommand : public Controler
 {
 public:
@@ -143,7 +149,7 @@ public:
 				return event::transfer_date;
 			default:
 				cout << "this command does not exist" << endl;
-			
+
 			}
 		}
 	}
