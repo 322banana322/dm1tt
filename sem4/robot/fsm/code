@@ -1,0 +1,43 @@
+enum camSys_state {ON, OFF};
+enum event_state {WAITING, READING, DRAWING, TRANSFERING};
+
+Class camSys {
+    camSys_state camState = OFF;
+    event_state eState = WAITING;
+    
+    public:
+    
+    void f_on() {
+        camState = ON;
+    }
+    
+    void f_off(){
+        camState = OFF;
+    }
+    
+    void f_read_coords(){
+        if (camState == ON) 
+        eState = READING;
+    }
+    
+    void f_trajectory_draw(){
+        if (camState == ON)
+        eState = DRAWING;
+    }
+    
+    void f_transfer_date(){
+        if (camState == ON)
+        eState = TRANSFERING;
+    }
+};
+
+int main(){
+    
+    camSys var;
+    
+    var.f_on();
+    var.f_off();
+    var.f_read_coords();
+    var.f_trajectory_draw();
+    var.f_transfer_date();
+}
